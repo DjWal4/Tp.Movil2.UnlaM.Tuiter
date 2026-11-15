@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="760" viewBox="0 0 1160 760" font-family="Arial, Helvetica, sans-serif">
+  <!-- ============================================================
+       WIREFRAME: Perfil (HU-06)
+       Marco 1: ver y editar | Marco 2: guardado OK | Marco 3: error al guardar
+       ============================================================ -->
+  <rect width="1160" height="760" fill="#f7f7f7"/>
+
+  <!-- ================= MARCO 1: VER / EDITAR ================= -->
+  <g transform="translate(20,20)">
+    <rect width="360" height="720" fill="#ffffff" stroke="#000000" stroke-width="2" rx="12"/>
+    <text x="12" y="24" font-size="12" fill="#666">9:41</text>
+    <line x1="0" y1="34" x2="360" y2="34" stroke="#000"/>
+
+    <!-- Barra superior -->
+    <text x="24" y="74" font-size="13" text-decoration="underline">Volver</text>
+    <text x="96" y="74" font-size="16" font-weight="bold">Mi perfil</text>
+    <circle cx="24" cy="62" r="11" fill="#000"/>
+    <text x="24" y="66" font-size="11" fill="#fff" text-anchor="middle">1</text>
+    <line x1="0" y1="90" x2="360" y2="90" stroke="#000"/>
+
+    <!-- Avatar + nombre -->
+    <circle cx="180" cy="150" r="40" fill="#ddd" stroke="#000"/>
+    <circle cx="152" cy="122" r="11" fill="#000"/>
+    <text x="152" y="126" font-size="11" fill="#fff" text-anchor="middle">2</text>
+    <text x="180" y="216" font-size="16" font-weight="bold" text-anchor="middle">Walter</text>
+
+    <!-- Nombre -->
+    <rect x="24" y="240" width="312" height="56" fill="none" stroke="#000" rx="6"/>
+    <text x="36" y="262" font-size="11" fill="#777">Nombre</text>
+    <text x="36" y="282" font-size="13">Walter</text>
+    <circle cx="34" cy="240" r="11" fill="#000"/>
+    <text x="34" y="244" font-size="11" fill="#fff" text-anchor="middle">3</text>
+
+    <!-- Email (solo lectura) -->
+    <rect x="24" y="310" width="312" height="70" fill="#f2f2f2" stroke="#999" rx="6"/>
+    <text x="36" y="332" font-size="11" fill="#777">Email</text>
+    <text x="36" y="352" font-size="13" fill="#555">wloiacono@alumno.unlam.edu.ar</text>
+    <text x="36" y="370" font-size="10" fill="#777">El email no se puede modificar.</text>
+    <circle cx="34" cy="310" r="11" fill="#000"/>
+    <text x="34" y="314" font-size="11" fill="#fff" text-anchor="middle">4</text>
+
+    <!-- Avatar URL -->
+    <rect x="24" y="394" width="312" height="56" fill="none" stroke="#000" rx="6"/>
+    <text x="36" y="416" font-size="11" fill="#777">URL del avatar</text>
+    <text x="36" y="436" font-size="12">https://ui-avatars.com/api/?name=Walter</text>
+    <circle cx="34" cy="394" r="11" fill="#000"/>
+    <text x="34" y="398" font-size="11" fill="#fff" text-anchor="middle">5</text>
+
+    <!-- Contraseña nueva -->
+    <rect x="24" y="464" width="312" height="70" fill="none" stroke="#000" rx="6"/>
+    <text x="36" y="486" font-size="11" fill="#777">Contraseña nueva (opcional)</text>
+    <text x="36" y="506" font-size="13">••••••••</text>
+    <text x="36" y="524" font-size="10" fill="#777">Dejala vacía si no querés cambiarla.</text>
+    <circle cx="34" cy="464" r="11" fill="#000"/>
+    <text x="34" y="468" font-size="11" fill="#fff" text-anchor="middle">6</text>
+
+    <!-- Guardar -->
+    <rect x="24" y="550" width="312" height="48" fill="#e6e6e6" stroke="#000" rx="24"/>
+    <text x="180" y="579" font-size="14" font-weight="bold" text-anchor="middle">Guardar</text>
+    <circle cx="34" cy="550" r="11" fill="#000"/>
+    <text x="34" y="554" font-size="11" fill="#fff" text-anchor="middle">7</text>
+
+    <line x1="24" y1="620" x2="336" y2="620" stroke="#ccc"/>
+
+    <!-- Salir -->
+    <rect x="24" y="636" width="312" height="44" fill="none" stroke="#000" rx="22"/>
+    <text x="180" y="663" font-size="13" text-anchor="middle">Salir</text>
+    <circle cx="34" cy="636" r="11" fill="#000"/>
+    <text x="34" y="640" font-size="11" fill="#fff" text-anchor="middle">8</text>
+  </g>
+
+  <!-- ================= MARCO 2: GUARDADO OK ================= -->
+  <g transform="translate(400,20)">
+    <rect width="360" height="720" fill="#ffffff" stroke="#000000" stroke-width="2" rx="12"/>
+    <text x="12" y="24" font-size="12" fill="#666">9:41</text>
+    <line x1="0" y1="34" x2="360" y2="34" stroke="#000"/>
+    <text x="24" y="74" font-size="13" text-decoration="underline">Volver</text>
+    <text x="96" y="74" font-size="16" font-weight="bold">Mi perfil</text>
+    <line x1="0" y1="90" x2="360" y2="90" stroke="#000"/>
+
+    <circle cx="180" cy="150" r="40" fill="#ddd" stroke="#000"/>
+    <text x="180" y="216" font-size="16" font-weight="bold" text-anchor="middle">Walter Actualizado</text>
+
+    <rect x="24" y="240" width="312" height="56" fill="none" stroke="#000" rx="6"/>
+    <text x="36" y="282" font-size="13">Walter Actualizado</text>
+
+    <rect x="24" y="310" width="312" height="70" fill="#f2f2f2" stroke="#999" rx="6"/>
+    <text x="36" y="352" font-size="13" fill="#555">wloiacono@alumno.unlam.edu.ar</text>
+    <text x="36" y="370" font-size="10" fill="#777">El email no se puede modificar.</text>
+
+    <rect x="24" y="394" width="312" height="56" fill="none" stroke="#000" rx="6"/>
+    <text x="36" y="436" font-size="12">https://ui-avatars.com/api/?name=Walter</text>
+
+    <rect x="24" y="464" width="312" height="70" fill="none" stroke="#000" rx="6"/>
+    <text x="36" y="486" font-size="11" fill="#777">Contraseña nueva (opcional)</text>
+
+    <rect x="24" y="550" width="312" height="48" fill="#e6e6e6" stroke="#000" rx="24"/>
+    <text x="180" y="579" font-size="14" font-weight="bold" text-anchor="middle">Guardar</text>
+
+    <!-- Confirmación -->
+    <text x="180" y="622" font-size="13" fill="#2e7d32" text-anchor="middle">Perfil actualizado.</text>
+    <circle cx="150" cy="600" r="11" fill="#000"/>
+    <text x="150" y="604" font-size="11" fill="#fff" text-anchor="middle">9</text>
+
+    <text x="180" y="656" font-size="11" fill="#666" text-anchor="middle">Los datos nuevos se ven en el formulario</text>
+    <text x="180" y="672" font-size="11" fill="#666" text-anchor="middle">y el avatar se recarga desde la URL.</text>
+  </g>
+
+  <!-- ================= MARCO 3: ERROR ================= -->
+  <g transform="translate(780,20)">
+    <rect width="360" height="720" fill="#ffffff" stroke="#000000" stroke-width="2" rx="12"/>
+    <text x="12" y="24" font-size="12" fill="#666">9:41</text>
+    <line x1="0" y1="34" x2="360" y2="34" stroke="#000"/>
+    <text x="24" y="74" font-size="13" text-decoration="underline">Volver</text>
+    <text x="96" y="74" font-size="16" font-weight="bold">Mi perfil</text>
+    <line x1="0" y1="90" x2="360" y2="90" stroke="#000"/>
+
+    <circle cx="180" cy="150" r="40" fill="#ddd" stroke="#000"/>
+    <text x="180" y="216" font-size="16" font-weight="bold" text-anchor="middle">Walter</text>
+
+    <rect x="24" y="240" width="312" height="56" fill="none" stroke="#000" rx="6"/>
+    <text x="36" y="282" font-size="13">Nombre que el usuario escribió</text>
+
+    <rect x="24" y="310" width="312" height="70" fill="#f2f2f2" stroke="#999" rx="6"/>
+    <text x="36" y="352" font-size="13" fill="#555">wloiacono@alumno.unlam.edu.ar</text>
+    <text x="36" y="370" font-size="10" fill="#777">El email no se puede modificar.</text>
+
+    <rect x="24" y="394" width="312" height="56" fill="none" stroke="#000" rx="6"/>
+    <text x="36" y="436" font-size="12">https://ui-avatars.com/api/?name=Walter</text>
+
+    <rect x="24" y="464" width="312" height="70" fill="none" stroke="#000" rx="6"/>
+    <text x="36" y="486" font-size="11" fill="#777">Contraseña nueva (opcional)</text>
+
+    <rect x="24" y="550" width="312" height="48" fill="#e6e6e6" stroke="#000" rx="24"/>
+    <text x="180" y="579" font-size="14" font-weight="bold" text-anchor="middle">Guardar</text>
+
+    <!-- Error de la API -->
+    <text x="180" y="622" font-size="12" fill="#b00020" text-anchor="middle">Sin conexión a internet.</text>
+    <text x="180" y="640" font-size="12" fill="#b00020" text-anchor="middle">Revisá tu red e intentá de nuevo.</text>
+    <circle cx="150" cy="600" r="11" fill="#000"/>
+    <text x="150" y="604" font-size="11" fill="#fff" text-anchor="middle">10</text>
+
+    <text x="180" y="672" font-size="11" fill="#666" text-anchor="middle">Los cambios siguen en el formulario.</text>
+  </g>
+
+  <text x="20" y="752" font-size="12" fill="#555">Perfil · marco 1: ver y editar · marco 2: cambios guardados · marco 3: error al guardar</text>
+</svg>
