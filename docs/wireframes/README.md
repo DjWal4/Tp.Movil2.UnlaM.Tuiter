@@ -61,6 +61,7 @@ nada nuevo. Si ya hay token guardado, la app abre directamente el feed.
 | 6 | Error de **formato de email** | Texto rojo debajo del campo, con el borde en rojo. | HU-04 esc. 3 |
 | 7 | Botón **deshabilitado** | Mientras el email es inválido no se puede enviar el formulario. | HU-04 esc. 3 |
 | 8 | Error de la **API** | "Ese email ya está registrado". Los datos cargados siguen en el formulario. | HU-04 esc. 4 |
+| 9 | Estado **enviando** | Spinner + "Registrando..."; los campos y **Volver** quedan deshabilitados. | HU-04 esc. 1 |
 
 Al registrarse bien, la app vuelve al login con el aviso **"Cuenta creada. Ya podés iniciar
 sesión."** (HU-04 esc. 1).
@@ -119,6 +120,7 @@ Al publicar con éxito, el borrador se borra y la próxima vez la pantalla apare
 | 7 | Estado **sin respuestas** | "Todavía no hay respuestas. ¡Respondé vos!". | HU-09 esc. 2 |
 | 8 | Estado **error** | "No se pudo cargar el post." | HU-09 esc. 3 |
 | 9 | Botón **Reintentar** | Vuelve a cargar el post y sus respuestas. | HU-09 esc. 3 |
+| 10 | Estado **cargando** | Spinner centrado mientras llegan el post y sus respuestas. | HU-09 esc. 1 |
 
 Si falla el envío de una respuesta, se muestra el error y **el texto escrito no se pierde**
 (HU-10 esc. 3).
@@ -139,6 +141,7 @@ Si falla el envío de una respuesta, se muestra el error y **el texto escrito no
 | 8 | Botón **Salir** | Cierra sesión y borra borrador, favoritos y token. | Funcionalidad opcional |
 | 9 | Confirmación **"Perfil actualizado."** | Aviso verde debajo del botón. | HU-06 esc. 2 |
 | 10 | Error al guardar | Mensaje rojo. **Los cambios siguen en el formulario.** | HU-06 esc. 5 |
+| 11 | Estado **cargando** | Spinner mientras se pide el perfil con `GET /me/profile`. | HU-06 esc. 1 |
 
 ---
 
@@ -152,6 +155,7 @@ Si falla el envío de una respuesta, se muestra el error y **el texto escrito no
 | 4 | Estado **lista vacía** | Explica cómo agregar favoritos desde el feed. | HU-08 esc. 2 |
 | 5 | **Quitar** (marco 3) | Al tocarlo, el autor desaparece de la lista. | HU-08 esc. 3 |
 | 6 | Aviso de persistencia | La baja queda guardada: no vuelve al reabrir la app. | HU-08 esc. 3 |
+| 7 | Estado **error de lectura** | Avisa si falló la lectura de Room; si ya había lista, se sigue mostrando. | HU-08 |
 
 La lista se lee de **Room**, así que se ve completa aunque no haya internet (HU-08 esc. 4).
 
