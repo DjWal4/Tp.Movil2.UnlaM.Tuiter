@@ -26,9 +26,9 @@ edición de perfil, seguridad del token y documentación obligatoria.
 - **R2 – Feedback de publicación**: spinner + "Publicando..." y bloqueo de "Volver".
 - **R7 – Botón "Responder"** en el detalle del post.
 - **Documentación**: `docs/wireframes/` con un SVG por pantalla (login, registro, feed,
-  publicar, detalle, perfil, favoritos), sus leyendas y mapeo a historias;
-  `docs/historias-usuario.md` con el backlog HU-01 a HU-11; README actualizado con equipo,
-  requisitos, token y wireframes.
+  publicar, detalle, perfil, favoritos), sus leyendas, los estados de carga / vacío / error
+  y el mapeo a historias; `docs/historias-usuario.md` con el backlog HU-01 a HU-11; README
+  actualizado con equipo, requisitos, token y wireframes.
 
 ### Cambiado
 
