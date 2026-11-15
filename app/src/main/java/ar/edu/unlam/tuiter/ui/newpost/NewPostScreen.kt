@@ -3,10 +3,13 @@ package ar.edu.unlam.tuiter.ui.newpost
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -54,7 +57,11 @@ fun NewPostScreen(
             TopAppBar(
                 title = { Text("Nuevo post") },
                 navigationIcon = {
-                    TextButton(onClick = onBack) { Text("Volver") }
+                    // HU-02 escenario 3: mientras se publica no se puede volver,
+                    // así el usuario no sale a mitad del envío.
+                    TextButton(onClick = onBack, enabled = !state.isPublishing) {
+                        Text("Volver")
+                    }
                 }
             )
         }
@@ -93,7 +100,18 @@ fun NewPostScreen(
                     enabled = state.message.isNotBlank() && !state.isPublishing,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(if (state.isPublishing) "Publicando..." else "Publicar")
+                    if (state.isPublishing) {
+                        // HU-02 escenario 3: indicador de progreso mientras se envía.
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(18.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                        Spacer(modifier = Modifier.size(8.dp))
+                        Text("Publicando...")
+                    } else {
+                        Text("Publicar")
+                    }
                 }
             }
                 // Mensaje de estado del borrador.

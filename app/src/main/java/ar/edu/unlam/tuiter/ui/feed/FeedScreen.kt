@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,6 +23,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -29,11 +32,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -43,6 +50,8 @@ import ar.edu.unlam.tuiter.ui.components.ErrorView
 import ar.edu.unlam.tuiter.ui.components.LoadingView
 import ar.edu.unlam.tuiter.ui.favorites.FavoritesViewModel
 import ar.edu.unlam.tuiter.ui.rememberAppContainer
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
@@ -50,20 +59,17 @@ import java.util.TimeZone
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
-    onBack: () -> Unit,
     onCreatePost: () -> Unit,
-    refreshKey: Int = 0,
-            onPostClick: (Int) -> Unit = {},
+    onPostClick: (Int) -> Unit = {},
     // Abre la pantalla de usuarios favoritos (R6).
     onOpenFavorites: () -> Unit = {},
-    // Cierra la sesión y limpia los datos locales (Paso 15).
-    onLogout: () -> Unit = {}
+    // Abre la pantalla de perfil (R5).
+    onOpenProfile: () -> Unit = {}
 ) {
     // DI (Paso 14): el contenedor nos da los repositorios ya armados.
     val container = rememberAppContainer()
 
     // ViewModel del feed: recibe su repositorio desde el contenedor.
-    // Antes se creaba solo con "PostRepository()" adentro del ViewModel.
     val viewModel: FeedViewModel = viewModel {
         FeedViewModel(container.postRepository)
     }
@@ -79,28 +85,56 @@ fun FeedScreen(
     // Estado de favoritos: lista + set de nombres para pintar ☆ o ★.
     val favorites by favoritesViewModel.state.collectAsState()
 
+    // Estado del scroll de la lista (lo usa el paginado automático).
+    val listState = rememberLazyListState()
+
+    // Snackbar: mensajito abajo que confirma "agregaste a favoritos" (HU-07).
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     // Al entrar por primera vez, cargamos el feed.
-    // Cada vez que cambia refreshKey (por ejemplo al volver de publicar),
-    // se recarga la primera página del feed.
-    LaunchedEffect(refreshKey) {
+    LaunchedEffect(Unit) {
         viewModel.loadFeed(reset = true)
+    }
+
+    // ------------------------------------------------------------
+    // PAGINADO AUTOMÁTICO (HU-01 escenario 3)
+    // ------------------------------------------------------------
+    // snapshotFlow observa el scroll: cada vez que el último ítem visible
+    // está cerca del final de la lista, pedimos la página siguiente.
+    // Se lee el estado actual con viewModel.state.value para no reiniciar
+    // el efecto en cada cambio.
+    LaunchedEffect(listState) {
+        snapshotFlow {
+            val info = listState.layoutInfo
+            val lastVisible = info.visibleItemsInfo.lastOrNull()?.index ?: -1
+            info.totalItemsCount > 0 && lastVisible >= info.totalItemsCount - 2
+        }
+            .distinctUntilChanged() // solo reacciona cuando cambia "llegué al final"
+            .collect { atEnd ->
+                if (atEnd) {
+                    val current = viewModel.state.value
+                    if (!current.endReached && !current.isLoading && current.posts.isNotEmpty()) {
+                        viewModel.loadFeed(reset = false)
+                    }
+                }
+            }
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Feed") },
-                navigationIcon = {
-                    TextButton(onClick = onBack) { Text("Volver") }
-                },
                 actions = {
                     // Abre la pantalla con los usuarios favoritos (R6).
                     TextButton(onClick = onOpenFavorites) { Text("★ Favoritos") }
-                    // Cierra la sesión y vuelve al login (Paso 15).
-                    TextButton(onClick = onLogout) { Text("Salir") }
+                    // Abre la pantalla de perfil (R5).
+                    TextButton(onClick = onOpenProfile) { Text("Perfil") }
                 }
             )
         },
+        // Contenedor del mensajito de confirmación (snackbar).
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(onClick = onCreatePost) {
                 Text("+")
@@ -163,42 +197,87 @@ fun FeedScreen(
 
                     // Lista de posts.
                     else -> {
-                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        LazyColumn(
+                            state = listState,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
                             // Sin "key" por ahora: si los IDs vienen repetidos o null,
                             // LazyColumn fallaría por claves duplicadas.
                             items(state.posts) { post ->
                                 PostItem(
                                     post = post,
                                     onLikeClick = { viewModel.toggleLike(it) },
+                                    // Tocar la tarjeta abre el detalle (HU-09).
                                     onPostClick = { p -> p.id?.let(onPostClick) },
                                     // ¿El autor de este post ya es favorito?
                                     isFavorite = post.author?.let { favorites.favoriteNames.contains(it) } == true,
-                                    // Estrella: agrega o quita al autor de favoritos.
+                                    // Estrella: agrega o quita al autor de favoritos (R6).
                                     onFavoriteClick = { p ->
-                                        favoritesViewModel.toggleFavorite(p.author, p.avatarUrl)
+                                        val author = p.author?.trim()
+                                        if (!author.isNullOrEmpty()) {
+                                            // Sabemos si estaba o no ANTES de tocarla,
+                                            // para mostrar el mensaje correcto.
+                                            val wasFavorite =
+                                                favorites.favoriteNames.contains(author)
+                                            favoritesViewModel.toggleFavorite(author, p.avatarUrl)
+                                            scope.launch {
+                                                snackbarHostState.showSnackbar(
+                                                    if (wasFavorite) {
+                                                        "Quitaste a $author de favoritos"
+                                                    } else {
+                                                        "Agregaste a $author a favoritos"
+                                                    }
+                                                )
+                                            }
+                                        }
                                     }
                                 )
                                 HorizontalDivider()
                             }
 
+                            // Pie de la lista: spinner mientras carga la página
+                            // siguiente, o botón Reintentar si esa carga falló.
                             item {
-                                if (state.isLoading) {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        CircularProgressIndicator()
+                                when {
+                                    state.isLoading -> {
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp),
+                                            horizontalArrangement = Arrangement.Center,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            CircularProgressIndicator(
+                                                modifier = Modifier.size(20.dp),
+                                                strokeWidth = 2.dp
+                                            )
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Text("Cargando más...")
+                                        }
                                     }
-                                } else if (!state.endReached) {
-                                    Button(
-                                        onClick = { viewModel.loadFeed(reset = false) },
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp)
-                                    ) {
-                                        Text("Cargar más")
+
+                                    state.endReached -> {
+                                        Text(
+                                            text = "No hay más posts",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+
+                                    // Si falló la página siguiente, damos un botón
+                                    // para reintentar (el error se ve arriba).
+                                    state.error != null -> {
+                                        Button(
+                                            onClick = { viewModel.loadFeed(reset = false) },
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp)
+                                        ) {
+                                            Text("Reintentar")
+                                        }
                                     }
                                 }
                             }
@@ -224,6 +303,12 @@ fun PostItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            // HU-09: tocar cualquier parte de la tarjeta abre el detalle.
+            // Los botones internos (like, estrella) siguen funcionando igual:
+            // ellos "consumen" el toque antes de que llegue a esta fila.
+            .clickable(enabled = onPostClick != null) {
+                onPostClick?.invoke(post)
+            }
             .padding(16.dp),
         verticalAlignment = Alignment.Top
     ) {
@@ -256,13 +341,7 @@ fun PostItem(
             Spacer(modifier = Modifier.height(4.dp))
 
             // Si message viene null, mostramos un texto genérico.
-            // Tocar el texto también abre el detalle.
-            Text(
-                text = post.message ?: "(sin texto)",
-                modifier = Modifier.clickable(enabled = onPostClick != null) {
-                    onPostClick?.invoke(post)
-                }
-            )
+            Text(text = post.message ?: "(sin texto)")
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -299,7 +378,8 @@ fun PostItem(
             }
 
             if (onPostClick != null) {
-                Spacer(modifier = Modifier.width(20.dp))
+                // Espacio vertical entre la fila de like/favorito y "Responder".
+                Spacer(modifier = Modifier.height(8.dp))
 
                 // Abre el post con sus respuestas.
                 Row(
