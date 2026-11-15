@@ -1,8 +1,30 @@
+// Import necesario para leer local.properties (archivo de configuración local).
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
+
+// ============================================================
+// SEGURIDAD: Application-Token fuera del código (consigna, sección 4)
+// ============================================================
+// El token NO se escribe en un archivo .kt (porque eso se sube al repo).
+// Se lee de local.properties, que está en .gitignore y no se versiona.
+// Luego se expone a Kotlin como BuildConfig.APPLICATION_TOKEN.
+//
+// Si el archivo no existe o no tiene la clave, el valor queda vacío
+// y la app no podrá autenticarse contra la API (ver README).
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+
+// applicationToken: valor de APPLICATION_TOKEN en local.properties (o "").
+val applicationToken: String = localProperties.getProperty("APPLICATION_TOKEN") ?: ""
 
 android {
     namespace = "ar.edu.unlam.tuiter"
@@ -18,6 +40,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Genera BuildConfig.APPLICATION_TOKEN con el valor leído arriba.
+        // Las comillas escapadas son necesarias: el valor en Java/Kotlin
+        // tiene que quedar como un String ("abc..."), no como un identificador.
+        buildConfigField("String", "APPLICATION_TOKEN", "\"$applicationToken\"")
     }
 
     buildTypes {
@@ -34,6 +61,8 @@ android {
     }
     buildFeatures {
         compose = true
+        // Habilita la clase BuildConfig (donde queda el token leído de local.properties).
+        buildConfig = true
     }
 }
 

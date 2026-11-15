@@ -1,5 +1,8 @@
 package ar.edu.unlam.tuiter.data.remote
 
+// BuildConfig lo genera Gradle automáticamente a partir de app/build.gradle.kts.
+// Ahí se define APPLICATION_TOKEN leyendo local.properties (que NO se versiona).
+import ar.edu.unlam.tuiter.BuildConfig
 import ar.edu.unlam.tuiter.data.session.SessionManager
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -12,7 +15,16 @@ object ApiClient {
     private const val BASE_URL = "https://tuiter.fragua.com.ar/api/v1/"
 
     // Token de aplicación (el que generaste en la web). NO es el token de usuario.
-    private const val APPLICATION_TOKEN = "70ff5833c7c6785f3e52b57dcf86e7ff12f6ad85587d4d9db5c7d768b5eb9714"
+    //
+    // SEGURIDAD (consigna, sección 4): antes estaba escrito acá y se subía al repo.
+    // Ahora viene de BuildConfig, que lo lee de local.properties (ignorado por Git).
+    // Si falta, queda vacío: la API responderá 401 y la app mostrará un error claro.
+    private val APPLICATION_TOKEN: String = BuildConfig.APPLICATION_TOKEN
+
+    // Permite que otras capas (por ejemplo la pantalla de login) avisen
+    // si el proyecto quedó sin configurar. No se muestra el token, solo si existe.
+    val isConfigured: Boolean
+        get() = APPLICATION_TOKEN.isNotBlank()
 
     private val client = OkHttpClient.Builder()
         .addInterceptor { chain ->
