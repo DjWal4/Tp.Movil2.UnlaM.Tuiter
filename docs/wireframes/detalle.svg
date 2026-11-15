@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="760" viewBox="0 0 1160 760" font-family="Arial, Helvetica, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1540" height="760" viewBox="0 0 1540 760" font-family="Arial, Helvetica, sans-serif">
   <!-- ============================================================
        WIREFRAME: Detalle de post (HU-09, HU-10, HU-11)
        Marco 1: post con respuestas | Marco 2: sin respuestas | Marco 3: error
        ============================================================ -->
-  <rect width="1160" height="760" fill="#f7f7f7"/>
+  <rect width="1540" height="760" fill="#f7f7f7"/>
 
   <!-- ================= MARCO 1: CON RESPUESTAS ================= -->
   <g transform="translate(20,20)">
@@ -120,5 +120,20 @@
     <text x="104" y="432" font-size="11" fill="#fff" text-anchor="middle">9</text>
   </g>
 
-  <text x="20" y="752" font-size="12" fill="#555">Detalle · marco 1: post con respuestas · marco 2: post sin respuestas · marco 3: error de red</text>
+  <!-- ================= MARCO 4: CARGANDO ================= -->
+  <g transform="translate(1160,20)">
+    <rect width="360" height="720" fill="#ffffff" stroke="#000000" stroke-width="2" rx="12"/>
+    <text x="12" y="24" font-size="12" fill="#666">9:41</text>
+    <line x1="0" y1="34" x2="360" y2="34" stroke="#000"/>
+    <text x="24" y="74" font-size="13" text-decoration="underline">Volver</text>
+    <text x="96" y="74" font-size="16" font-weight="bold">Post y respuestas</text>
+    <line x1="0" y1="90" x2="360" y2="90" stroke="#000"/>
+
+    <circle cx="180" cy="370" r="28" fill="none" stroke="#000" stroke-width="3" stroke-dasharray="12 8"/>
+    <text x="180" y="430" font-size="13" fill="#555" text-anchor="middle">Cargando...</text>
+    <circle cx="150" cy="342" r="11" fill="#000"/>
+    <text x="150" y="346" font-size="11" fill="#fff" text-anchor="middle">10</text>
+  </g>
+
+  <text x="20" y="752" font-size="12" fill="#555">Detalle · marco 1: post con respuestas · marco 2: post sin respuestas · marco 3: error de red · marco 4: cargando</text>
 </svg>
