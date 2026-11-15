@@ -5,15 +5,23 @@ import ar.edu.unlam.tuiter.data.model.LoginRequest
 import ar.edu.unlam.tuiter.data.model.LoginResponse
 import ar.edu.unlam.tuiter.data.model.Post
 import ar.edu.unlam.tuiter.data.model.ProfileResponse
+import ar.edu.unlam.tuiter.data.model.RegisterRequest
+import ar.edu.unlam.tuiter.data.model.UpdateProfileRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TuiterApi {
+    // POST /api/v1/users -> registra un usuario nuevo (R4).
+    // Response<Unit> porque no necesitamos leer el body, solo saber si salió bien.
+    @POST("users")
+    suspend fun register(@Body request: RegisterRequest): Response<Unit>
+
     // POST /api/v1/login -> devuelve name, email y token de usuario
     @POST("login")
     suspend fun login(@Body request: LoginRequest): LoginResponse
@@ -22,6 +30,12 @@ interface TuiterApi {
     // Necesita el header Authorization (lo agrega el interceptor de ApiClient).
     @GET("me/profile")
     suspend fun getProfile(): ProfileResponse
+
+    // PUT /api/v1/me/profile -> edita el perfil del usuario logueado (R5).
+    // Acepta name, avatar_url y password (los que no se envían, no se modifican).
+    // Response<Unit>: solo nos interesa si respondió 2xx.
+    @PUT("me/profile")
+    suspend fun updateProfile(@Body request: UpdateProfileRequest): Response<Unit>
 
     // GET /api/v1/me/feed?page=1&only_parents=true
     // page: número de página

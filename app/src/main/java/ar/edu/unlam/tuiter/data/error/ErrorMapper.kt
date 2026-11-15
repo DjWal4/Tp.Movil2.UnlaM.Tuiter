@@ -28,9 +28,14 @@ object ErrorMapper {
             // La API respondió con un código HTTP de error.
             is HttpException -> when (error.code()) {
                 400 -> "Los datos enviados no son válidos."
+                // 401 en un endpoint /me significa que el token de usuario no sirve.
                 401 -> "Tu sesión venció. Volvé a iniciar sesión."
                 403 -> "No tenés permiso para hacer eso."
                 404 -> "No se encontró el contenido. Puede haber sido eliminado."
+                // 409 y 422 los usa la API al registrar (R4):
+                // 409 = el email ya existe, 422 = datos inválidos.
+                409 -> "Ese email ya está registrado. Probá con otro o iniciá sesión."
+                422 -> "Los datos no son válidos. Revisá el email y la contraseña."
                 in 500..599 -> "El servidor tuvo un problema. Intentá más tarde."
                 else -> "Ocurrió un error (código ${error.code()}). Intentá de nuevo."
             }

@@ -164,7 +164,8 @@ fun PostDetailScreen(
                     onClick = { viewModel.sendReply() },
                     enabled = state.replyText.isNotBlank() && !state.isReplying
                 ) {
-                    Text(if (state.isReplying) "..." else "Enviar")
+                    // HU-10: el botón se llama "Responder".
+                    Text(if (state.isReplying) "..." else "Responder")
                 }
             }
         }
