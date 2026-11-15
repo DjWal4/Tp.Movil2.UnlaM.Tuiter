@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="760" viewBox="0 0 1520 760" font-family="Arial, Helvetica, sans-serif">
+  <!-- ============================================================
+       WIREFRAME: Feed (HU-01, HU-07, HU-11)
+       Marco 1: normal | Marco 2: cargando | Marco 3: lista vacía | Marco 4: error
+       ============================================================ -->
+  <rect width="1520" height="760" fill="#f7f7f7"/>
+
+  <!-- ================= MARCO 1: NORMAL ================= -->
+  <g transform="translate(20,20)">
+    <rect width="360" height="720" fill="#ffffff" stroke="#000000" stroke-width="2" rx="12"/>
+    <text x="12" y="24" font-size="12" fill="#666">9:41</text>
+    <line x1="0" y1="34" x2="360" y2="34" stroke="#000"/>
+
+    <!-- Barra superior -->
+    <text x="16" y="72" font-size="17" font-weight="bold">Feed</text>
+    <text x="248" y="72" font-size="12" text-decoration="underline">★ Favoritos</text>
+    <text x="320" y="72" font-size="12" text-decoration="underline">Perfil</text>
+    <circle cx="236" cy="60" r="11" fill="#000"/>
+    <text x="236" y="64" font-size="11" fill="#fff" text-anchor="middle">1</text>
+    <circle cx="310" cy="60" r="11" fill="#000"/>
+    <text x="310" y="64" font-size="11" fill="#fff" text-anchor="middle">2</text>
+    <line x1="0" y1="88" x2="360" y2="88" stroke="#000"/>
+
+    <!-- Botón actualizar -->
+    <rect x="248" y="96" width="96" height="30" fill="#eee" stroke="#000" rx="15"/>
+    <text x="296" y="116" font-size="11" text-anchor="middle">Actualizar</text>
+
+    <!-- Post 1 -->
+    <circle cx="46" cy="168" r="20" fill="#ddd" stroke="#000"/>
+    <text x="76" y="162" font-size="13" font-weight="bold">Walter</text>
+    <text x="200" y="162" font-size="10" fill="#666">15/11/2026 18:42</text>
+    <text x="76" y="184" font-size="12">Demo final paso 19 publicado...</text>
+    <text x="76" y="212" font-size="14">♡  0</text>
+    <text x="140" y="212" font-size="12">☆ Favorito</text>
+    <text x="240" y="212" font-size="11">💬 Responder</text>
+    <circle cx="60" cy="204" r="11" fill="#000"/>
+    <text x="60" y="208" font-size="11" fill="#fff" text-anchor="middle">4</text>
+    <circle cx="128" cy="204" r="11" fill="#000"/>
+    <text x="128" y="208" font-size="11" fill="#fff" text-anchor="middle">5</text>
+    <line x1="0" y1="228" x2="360" y2="228" stroke="#ccc"/>
+
+    <!-- Post 2 (con like activo) -->
+    <circle cx="46" cy="268" r="20" fill="#ddd" stroke="#000"/>
+    <text x="76" y="262" font-size="13" font-weight="bold">Probe User</text>
+    <text x="205" y="262" font-size="10" fill="#666">15/11/2026 12:20</text>
+    <text x="76" y="284" font-size="12">Post sin respuestas 1794756044743</text>
+    <text x="76" y="312" font-size="14">♥  1</text>
+    <text x="140" y="312" font-size="12">★ Favorito</text>
+    <text x="240" y="312" font-size="11">💬 Responder</text>
+    <circle cx="60" cy="304" r="11" fill="#000"/>
+    <text x="60" y="308" font-size="11" fill="#fff" text-anchor="middle">6</text>
+    <line x1="0" y1="328" x2="360" y2="328" stroke="#ccc"/>
+
+    <!-- Post 3 -->
+    <circle cx="46" cy="368" r="20" fill="#ddd" stroke="#000"/>
+    <text x="76" y="362" font-size="13" font-weight="bold">Walter</text>
+    <text x="200" y="362" font-size="10" fill="#666">14/11/2026 23:44</text>
+    <text x="76" y="384" font-size="12">Mensaje actual</text>
+    <text x="76" y="412" font-size="14">♡  0</text>
+    <text x="140" y="412" font-size="12">☆ Favorito</text>
+    <text x="240" y="412" font-size="11">💬 Responder</text>
+    <line x1="0" y1="428" x2="360" y2="428" stroke="#ccc"/>
+
+    <!-- Pie de lista -->
+    <text x="180" y="470" font-size="12" fill="#555" text-anchor="middle">Cargando más...</text>
+    <circle cx="316" cy="458" r="11" fill="#000"/>
+    <text x="316" y="462" font-size="11" fill="#fff" text-anchor="middle">7</text>
+
+    <!-- FAB -->
+    <circle cx="312" cy="664" r="26" fill="#e6e6e6" stroke="#000"/>
+    <text x="312" y="672" font-size="22" text-anchor="middle">+</text>
+    <circle cx="282" cy="644" r="11" fill="#000"/>
+    <text x="282" y="648" font-size="11" fill="#fff" text-anchor="middle">8</text>
+  </g>
+
+  <!-- ================= MARCO 2: CARGANDO ================= -->
+  <g transform="translate(400,20)">
+    <rect width="360" height="720" fill="#ffffff" stroke="#000000" stroke-width="2" rx="12"/>
+    <text x="12" y="24" font-size="12" fill="#666">9:41</text>
+    <line x1="0" y1="34" x2="360" y2="34" stroke="#000"/>
+    <text x="16" y="72" font-size="17" font-weight="bold">Feed</text>
+    <line x1="0" y1="88" x2="360" y2="88" stroke="#000"/>
+
+    <circle cx="180" cy="380" r="28" fill="none" stroke="#000" stroke-width="3" stroke-dasharray="12 8"/>
+    <text x="180" y="440" font-size="13" fill="#555" text-anchor="middle">Cargando...</text>
+    <circle cx="150" cy="352" r="11" fill="#000"/>
+    <text x="150" y="356" font-size="11" fill="#fff" text-anchor="middle">9</text>
+  </g>
+
+  <!-- ================= MARCO 3: LISTA VACIA ================= -->
+  <g transform="translate(780,20)">
+    <rect width="360" height="720" fill="#ffffff" stroke="#000000" stroke-width="2" rx="12"/>
+    <text x="12" y="24" font-size="12" fill="#666">9:41</text>
+    <line x1="0" y1="34" x2="360" y2="34" stroke="#000"/>
+    <text x="16" y="72" font-size="17" font-weight="bold">Feed</text>
+    <line x1="0" y1="88" x2="360" y2="88" stroke="#000"/>
+
+    <text x="180" y="370" font-size="34" text-anchor="middle">✉</text>
+    <text x="180" y="404" font-size="14" text-anchor="middle">Todavía no hay posts.</text>
+    <text x="180" y="424" font-size="12" text-anchor="middle" fill="#555">Tocá el botón + para publicar el primero.</text>
+    <circle cx="150" cy="340" r="11" fill="#000"/>
+    <text x="150" y="344" font-size="11" fill="#fff" text-anchor="middle">10</text>
+
+    <circle cx="312" cy="664" r="26" fill="#e6e6e6" stroke="#000"/>
+    <text x="312" y="672" font-size="22" text-anchor="middle">+</text>
+  </g>
+
+  <!-- ================= MARCO 4: ERROR ================= -->
+  <g transform="translate(1160,20)">
+    <rect width="360" height="720" fill="#ffffff" stroke="#000000" stroke-width="2" rx="12"/>
+    <text x="12" y="24" font-size="12" fill="#666">9:41</text>
+    <line x1="0" y1="34" x2="360" y2="34" stroke="#000"/>
+    <text x="16" y="72" font-size="17" font-weight="bold">Feed</text>
+    <line x1="0" y1="88" x2="360" y2="88" stroke="#000"/>
+
+    <text x="180" y="356" font-size="34" text-anchor="middle">😕</text>
+    <text x="180" y="392" font-size="13" text-anchor="middle">Sin conexión a internet.</text>
+    <text x="180" y="410" font-size="13" text-anchor="middle">Revisá tu red e intentá de nuevo.</text>
+    <rect x="120" y="436" width="120" height="42" fill="#e6e6e6" stroke="#000" rx="21"/>
+    <text x="180" y="462" font-size="13" text-anchor="middle">Reintentar</text>
+    <circle cx="150" cy="330" r="11" fill="#000"/>
+    <text x="150" y="334" font-size="11" fill="#fff" text-anchor="middle">11</text>
+    <circle cx="104" cy="444" r="11" fill="#000"/>
+    <text x="104" y="448" font-size="11" fill="#fff" text-anchor="middle">12</text>
+  </g>
+
+  <text x="20" y="752" font-size="12" fill="#555">Feed · marco 1: normal · marco 2: cargando · marco 3: lista vacía · marco 4: error de red</text>
+</svg>
