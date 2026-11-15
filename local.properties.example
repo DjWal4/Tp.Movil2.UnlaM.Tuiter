@@ -1,0 +1,20 @@
+# ============================================================
+# local.properties.example
+# ============================================================
+# Copiá este archivo como "local.properties" en la raíz del proyecto
+# y completá los valores. "local.properties" NO se sube al repositorio
+# (está en .gitignore), así el token nunca queda en Git.
+#
+# En Windows (PowerShell):
+#   Copy-Item local.properties.example local.properties
+#
+# En macOS / Linux:
+#   cp local.properties.example local.properties
+#
+# Después abrí local.properties y reemplazá:
+#   - sdk.dir: la ruta a tu Android SDK (Android Studio la completa sola).
+#   - APPLICATION_TOKEN: el token que generaste en tuiter.fragua.com.ar
+#     (botón CREATE TOKEN, paso 2 del Anexo I de la consigna).
+
+sdk.dir=/ruta/a/tu/Android/Sdk
+APPLICATION_TOKEN=pega-aqui-tu-token
