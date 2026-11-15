@@ -2,6 +2,8 @@ package ar.edu.unlam.tuiter.data.session
 
 import android.content.Context
 import android.content.SharedPreferences
+// Paso 19 (Lint): extensión KTX `edit { }`, más corta y sin el `?.apply()` manual.
+import androidx.core.content.edit
 
 // Manejo de la sesión del usuario (token).
 //
@@ -41,12 +43,14 @@ object SessionManager {
     // Guarda el token recibido del login (en memoria Y en disco).
     fun saveToken(token: String) {
         userToken = token
-        prefs?.edit()?.putString(KEY_TOKEN, token)?.apply()
+        // `edit { }` guarda los cambios con apply() por dentro.
+        prefs?.edit { putString(KEY_TOKEN, token) }
     }
 
     // Borra la sesión (lo usa "Cerrar sesión", Paso 15).
     fun clear() {
         userToken = null
-        prefs?.edit()?.remove(KEY_TOKEN)?.apply()
+        // `edit { }` guarda los cambios con apply() por dentro.
+        prefs?.edit { remove(KEY_TOKEN) }
     }
 }
