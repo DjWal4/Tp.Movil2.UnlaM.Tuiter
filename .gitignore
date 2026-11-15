@@ -1,0 +1,40 @@
+# ============================================================
+# .gitignore - UNLaM Tuiter
+# ============================================================
+# Todo lo que NO se sube al repositorio: archivos que genera
+# Gradle / Android Studio, configuración local de cada máquina
+# y archivos con datos sensibles (firmas, rutas del SDK).
+
+# --- Android Studio / IntelliJ IDEA ---
+*.iml
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.idea/
+
+# --- Gradle ---
+.gradle
+.gradle/
+build/
+/build
+/app/build
+.kotlin/
+
+# --- Configuración local (cada máquina tiene su propia ruta al SDK) ---
+local.properties
+/local.properties
+
+# --- NDK / código nativo ---
+.externalNativeBuild
+.cxx
+
+# --- Varios ---
+.DS_Store
+/captures
+
+# --- Firmas y secretos: NUNCA se suben ---
+*.jks
+*.keystore

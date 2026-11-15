@@ -1,0 +1,13 @@
+# Normaliza los finales de línea para que el proyecto se vea igual
+# en Windows, Linux y macOS.
+* text=auto eol=lf
+
+# Los scripts de Windows necesitan CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Archivos binarios: Git no debe intentar convertirlos.
+*.jar binary
+*.webp binary
+*.png binary
+*.jpg binary
