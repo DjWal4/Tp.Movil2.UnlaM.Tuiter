@@ -425,6 +425,7 @@ feature/HU-05-login
 feature/HU-06-perfil
 feature/HU-01-07-11-feed-ux
 feature/docs-wireframes
+feature/docs-wireframes-estados
 ```
 
 Ramas de la versión 1.0.0:
