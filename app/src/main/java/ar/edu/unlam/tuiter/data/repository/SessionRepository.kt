@@ -14,6 +14,16 @@ class SessionRepository(
     private val draftRepository: DraftRepository,
     private val favoriteRepository: FavoriteRepository
 ) {
+    // Guarda el token que devuelve el login (R4).
+    // La UI no toca SessionManager directamente: le pide esto al repositorio.
+    fun saveSession(token: String) {
+        SessionManager.saveToken(token)
+    }
+
+    // Indica si hay una sesión activa (token guardado en memoria).
+    // La usa MainActivity al arrancar para decidir si abre el feed (HU-05 esc. 3).
+    fun isLoggedIn(): Boolean = SessionManager.isLoggedIn
+
     suspend fun logout() {
         // 1) Limpieza de la base local (Room).
         draftRepository.clearDraft()
