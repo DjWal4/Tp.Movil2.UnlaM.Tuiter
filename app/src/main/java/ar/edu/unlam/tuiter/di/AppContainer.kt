@@ -4,6 +4,7 @@ import android.content.Context
 import ar.edu.unlam.tuiter.data.local.TuiterDatabase
 import ar.edu.unlam.tuiter.data.remote.ApiClient
 import ar.edu.unlam.tuiter.data.remote.TuiterApi
+import ar.edu.unlam.tuiter.data.repository.AuthRepository
 import ar.edu.unlam.tuiter.data.repository.DraftRepository
 import ar.edu.unlam.tuiter.data.repository.FavoriteRepository
 import ar.edu.unlam.tuiter.data.repository.PostRepository
@@ -34,6 +35,9 @@ class AppContainer(context: Context) {
     val postRepository: PostRepository = PostRepository(api)
     val draftRepository: DraftRepository = DraftRepository(database.draftDao())
     val favoriteRepository: FavoriteRepository = FavoriteRepository(database.favoriteUserDao())
+
+    // Repositorio de autenticación y perfil (R4 y R5).
+    val authRepository: AuthRepository = AuthRepository(api)
 
     // Repositorio de sesión (Paso 15): usa los otros dos para limpiar la base.
     val sessionRepository: SessionRepository =
