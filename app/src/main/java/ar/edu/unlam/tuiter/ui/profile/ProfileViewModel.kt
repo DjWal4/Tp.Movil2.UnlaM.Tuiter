@@ -97,22 +97,30 @@ class ProfileViewModel(
         val current = _state.value
         if (!current.canSave) return
 
-        // Solo mandamos los campos que cambiaron.
-        // Si el nombre quedó igual, se envía null y Gson lo omite del JSON.
+        // IMPORTANTE (corregido durante la verificación en el celular):
+        // aunque la documentación muestra los tres campos como opcionales,
+        // el servidor valida `avatar_url` como OBLIGATORIO y responde
+        // 500 si no llega. Por eso ahora mandamos SIEMPRE el nombre y el
+        // avatar; la contraseña sigue siendo opcional.
         val newName = current.name.trim()
+
+        // Si el campo de avatar quedó vacío, no queremos borrar la imagen:
+        // mandamos la que ya tenía. Y si el perfil nunca tuvo avatar,
+        // generamos uno con el nombre para que la API no lo rechace.
+        val fallbackAvatar =
+            "https://ui-avatars.com/api/?name=" +
+                java.net.URLEncoder.encode(newName, "UTF-8")
         val newAvatar = current.avatarUrl.trim()
-
-        val nameToSend = if (newName != originalName) newName else null
-
-        // El avatar vacío significa "no lo toques" (evita dejar el perfil sin imagen).
-        val avatarToSend =
-            if (newAvatar.isNotBlank() && newAvatar != originalAvatarUrl) newAvatar else null
+            .ifBlank { originalAvatarUrl.ifBlank { fallbackAvatar } }
 
         // La contraseña solo se envía si el usuario escribió una nueva.
         val passwordToSend = current.password.takeIf { it.isNotBlank() }
 
         // Si no cambió nada, avisamos y no llamamos a la API.
-        if (nameToSend == null && avatarToSend == null && passwordToSend == null) {
+        val nothingChanged = newName == originalName &&
+            newAvatar == originalAvatarUrl &&
+            passwordToSend == null
+        if (nothingChanged) {
             _state.value = current.copy(successMessage = "No hay cambios para guardar.")
             return
         }
@@ -122,14 +130,14 @@ class ProfileViewModel(
         viewModelScope.launch {
             try {
                 authRepository.updateProfile(
-                    name = nameToSend,
-                    avatarUrl = avatarToSend,
+                    name = newName,
+                    avatarUrl = newAvatar,
                     password = passwordToSend
                 )
 
                 // Actualizamos los "originales" para futuras comparaciones.
                 originalName = newName
-                if (avatarToSend != null) originalAvatarUrl = avatarToSend
+                originalAvatarUrl = newAvatar
 
                 _state.value = _state.value.copy(
                     isSaving = false,
