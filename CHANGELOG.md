@@ -56,6 +56,11 @@ edición de perfil, seguridad del token y documentación obligatoria.
   anterior junto al aviso "Cuenta creada...".
 - **Login**: el texto que se escribe en los campos se ve más oscuro y legible, también con
   el tema dinámico de Android (nuevo `ui/theme/TextFieldColors.kt`).
+- **Tema de la app**: se fija en **claro** (`darkTheme = false`, `dynamicColor = false`) y el
+  contenido se envuelve en un `Surface` con `colorScheme.background`. Causa: con el celular en
+  modo oscuro, Compose aplicaba la paleta oscura (textos claros) sobre la ventana clara de
+  `themes.xml`, y todos los textos quedaban casi invisibles (medido: `#EDEDED` sobre `#FAFAFA`).
+  Ahora el texto es `#1F1F1F` sobre `#FEF7FF` y los botones `#6650A4` con texto blanco.
 
 ### Notas técnicas
 
