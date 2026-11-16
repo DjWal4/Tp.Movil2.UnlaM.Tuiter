@@ -105,4 +105,16 @@ class NewPostViewModel(
         fun consumePublished() {
             _state.value = _state.value.copy(published = false)
         }
+
+        // La pantalla muestra el mensaje del borrador como aviso inferior
+        // (snackbar). Después de mostrarlo lo consume, así puede volver a
+        // aparecer si el usuario guarda otra vez.
+        fun consumeDraftStatus() {
+            _state.value = _state.value.copy(draftStatus = null)
+        }
+
+        // Lo mismo para el mensaje de error: se muestra una vez y se limpia.
+        fun consumeError() {
+            _state.value = _state.value.copy(error = null)
+        }
     }
