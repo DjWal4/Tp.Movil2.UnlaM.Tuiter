@@ -72,8 +72,8 @@ sesión."** (HU-04 esc. 1).
 
 | # | Elemento | Qué hace | Historia |
 |---|---|---|---|
-| 1 | **★ Favoritos** (barra superior) | Abre la pantalla de usuarios favoritos. | HU-08 |
-| 2 | **Perfil** (barra superior) | Abre el perfil del usuario logueado. | HU-06 |
+| 1 | **★ Favoritos** (ícono en la barra superior) | Abre la pantalla de usuarios favoritos. | HU-08 |
+| 2 | **👤 Perfil** (ícono en la barra superior) | Abre el perfil del usuario logueado. | HU-06 |
 | 3 | Tarjeta de post | Muestra autor, avatar, fecha y mensaje. Al tocarla se abre el detalle. | HU-01 · HU-09 |
 | 4 | **Me gusta** (♡/♥ + contador) | Da o quita like. La segunda tarjeta muestra el estado activo. | HU-11 |
 | 5 | **☆/★ Favorito** | Guarda o quita al autor de la lista local de favoritos. | HU-07 |
@@ -85,7 +85,7 @@ sesión."** (HU-04 esc. 1).
 | 11 | Estado **error** | Mensaje de red ("Sin conexión a internet..."). | HU-01 esc. 4 |
 | 12 | Botón **Reintentar** | Vuelve a pedir el feed después de un error. | HU-01 esc. 4 |
 
-El botón **Actualizar** (arriba a la derecha de la lista) recarga el feed desde la página 1.
+El ícono **⟳ Actualizar** (barra superior, junto a la estrella) recarga el feed desde la página 1.
 
 ---
 

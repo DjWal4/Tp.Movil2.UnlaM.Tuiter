@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,18 +17,28 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,6 +49,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +61,7 @@ import ar.edu.unlam.tuiter.data.model.Post
 import ar.edu.unlam.tuiter.ui.components.EmptyView
 import ar.edu.unlam.tuiter.ui.components.ErrorView
 import ar.edu.unlam.tuiter.ui.components.LoadingView
+import ar.edu.unlam.tuiter.ui.components.TuiterTopBar
 import ar.edu.unlam.tuiter.ui.favorites.FavoritesViewModel
 import ar.edu.unlam.tuiter.ui.rememberAppContainer
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -123,83 +137,94 @@ fun FeedScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Feed") },
+            // Barra superior del wireframe: nombre de la app a la izquierda
+            // y los accesos a favoritos y perfil como íconos a la derecha.
+            TuiterTopBar(
+                title = "UNLaM Tuiter",
                 actions = {
+                    // Recarga manual del feed (se mantiene la función de "Actualizar"
+                    // que ya existía, ahora como ícono para respetar el wireframe).
+                    IconButton(
+                        onClick = { viewModel.loadFeed(reset = true) },
+                        enabled = !state.isLoading
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Refresh,
+                            contentDescription = "Actualizar"
+                        )
+                    }
                     // Abre la pantalla con los usuarios favoritos (R6).
-                    TextButton(onClick = onOpenFavorites) { Text("★ Favoritos") }
+                    IconButton(onClick = onOpenFavorites) {
+                        Icon(
+                            imageVector = Icons.Filled.Star,
+                            contentDescription = "Usuarios favoritos"
+                        )
+                    }
                     // Abre la pantalla de perfil (R5).
-                    TextButton(onClick = onOpenProfile) { Text("Perfil") }
+                    IconButton(onClick = onOpenProfile) {
+                        Icon(
+                            imageVector = Icons.Filled.Person,
+                            contentDescription = "Mi perfil"
+                        )
+                    }
                 }
             )
         },
         // Contenedor del mensajito de confirmación (snackbar).
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
+            // Botón flotante "+" del wireframe: abre la pantalla de publicación.
             FloatingActionButton(onClick = onCreatePost) {
-                Text("+")
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Nuevo post"
+                )
             }
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            // Botón visible para recargar el feed.
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Button(
-                    onClick = { viewModel.loadFeed(reset = true) },
-                    enabled = !state.isLoading
-                ) {
-                    Text(if (state.isLoading) "Actualizando..." else "Actualizar")
+            when {
+                // Cargando y todavía no hay posts (Paso 16: componente unificado).
+                state.isLoading && state.posts.isEmpty() -> {
+                    LoadingView(message = "Cargando publicaciones...")
                 }
-            }
 
-            // Si hubo un error con un like (y ya hay posts), lo mostramos acá.
-            state.error?.let { error ->
-                if (state.posts.isNotEmpty()) {
-                    Text(
-                        text = error,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                // Error y sin posts para mostrar: mensaje claro + Reintentar.
+                state.error != null && state.posts.isEmpty() -> {
+                    ErrorView(
+                        title = "No se pudo cargar el feed",
+                        message = state.error ?: "Error desconocido",
+                        onRetry = { viewModel.loadFeed(reset = true) }
                     )
                 }
-            }
 
-            Box(modifier = Modifier.weight(1f)) {
-                when {
-                    // Cargando y todavía no hay posts (Paso 16: componente unificado).
-                    state.isLoading && state.posts.isEmpty() -> {
-                        LoadingView()
-                    }
+                // No hay posts y no hubo error: estado vacío explicativo.
+                state.posts.isEmpty() -> {
+                    EmptyView(
+                        title = "Todavía no hay posts.",
+                        message = "Tocá el botón + para publicar el primero."
+                    )
+                }
 
-                    // Error y sin posts para mostrar: mensaje claro + Reintentar.
-                    state.error != null && state.posts.isEmpty() -> {
-                        ErrorView(
-                            message = state.error ?: "Error desconocido",
-                            onRetry = { viewModel.loadFeed(reset = true) }
-                        )
-                    }
+                // Lista de posts.
+                else -> {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        // Si hubo un error con un like (y ya hay posts), lo mostramos
+                        // como una franja arriba de la lista.
+                        state.error?.let { error ->
+                            ErrorBanner(message = error)
+                        }
 
-                    // No hay posts y no hubo error: estado vacío explicativo.
-                    state.posts.isEmpty() -> {
-                        EmptyView(
-                            message = "Todavía no hay posts.\n" +
-                                "Tocá el botón + para publicar el primero."
-                        )
-                    }
-
-                    // Lista de posts.
-                    else -> {
                         LazyColumn(
                             state = listState,
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.fillMaxSize(),
+                            // Deja aire abajo para que el botón flotante "+"
+                            // no tape el último post.
+                            contentPadding = PaddingValues(bottom = 88.dp)
                         ) {
                             // Sin "key" por ahora: si los IDs vienen repetidos o null,
                             // LazyColumn fallaría por claves duplicadas.
@@ -260,6 +285,7 @@ fun FeedScreen(
                                         Text(
                                             text = "No hay más posts",
                                             style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .padding(16.dp),
@@ -289,6 +315,24 @@ fun FeedScreen(
     }
 }
 
+// Franja de error arriba de la lista (cuando ya hay posts en pantalla).
+// Antes era un texto suelto; ahora usa el color de error del tema para
+// que se distinga sin romper la estructura del feed.
+@Composable
+private fun ErrorBanner(message: String) {
+    Surface(
+        color = MaterialTheme.colorScheme.errorContainer,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = message,
+            color = MaterialTheme.colorScheme.onErrorContainer,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+    }
+}
+
 // Público: lo reutiliza la pantalla de detalle.
 // Los dos últimos parámetros tienen valor por defecto, así el detalle
 // sigue funcionando sin tocarlo (la estrella solo aparece si se pasa la acción).
@@ -300,100 +344,145 @@ fun PostItem(
     isFavorite: Boolean = false,
     onFavoriteClick: ((Post) -> Unit)? = null
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             // HU-09: tocar cualquier parte de la tarjeta abre el detalle.
-            // Los botones internos (like, estrella) siguen funcionando igual:
-            // ellos "consumen" el toque antes de que llegue a esta fila.
+            // Los botones internos (like, estrella, responder) siguen funcionando
+            // igual: ellos "consumen" el toque antes de que llegue a esta columna.
             .clickable(enabled = onPostClick != null) {
                 onPostClick?.invoke(post)
             }
-            .padding(16.dp),
-        verticalAlignment = Alignment.Top
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        // Avatar del autor (Coil carga la imagen desde la URL).
-        AsyncImage(
-            model = post.avatarUrl,
-            contentDescription = "Avatar de ${post.author?: "usuario"}",
-            modifier = Modifier
-                .size(48.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop
-        )
+        // Fila superior del wireframe: avatar a la izquierda,
+        // autor + fecha arriba y el texto del post debajo.
+        Row(verticalAlignment = Alignment.Top) {
+            // Avatar del autor (Coil carga la imagen desde la URL).
+            AsyncImage(
+                model = post.avatarUrl,
+                contentDescription = "Avatar de ${post.author ?: "usuario"}",
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
 
-        Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    // Si author viene null, mostramos un texto genérico.
+                    Text(
+                        text = post.author ?: "Sin autor",
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    // La fecha va a la derecha, en gris (como en el wireframe).
+                    Text(
+                        // Si date viene null, formatDate devuelve "".
+                        text = formatDate(post.date ?: ""),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
 
-                // Si author viene null, mostramos un texto genérico.
-                Text(text = post.author ?: "Sin autor",
-                    fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
+
+                // Si message viene null, mostramos un texto genérico.
                 Text(
-                    // Si date viene null, formatDate devuelve "".
-                    text = formatDate(post.date ?: ""),
-                    style = MaterialTheme.typography.bodySmall
+                    text = post.message ?: "(sin texto)",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Fila de acciones del wireframe: me gusta + contador, favorito y
+        // responder, todo en UNA sola línea (antes "Responder" iba aparte).
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Corazón clickeable: da o quita el like.
+            PostAction(
+                icon = if (post.liked == true) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                // Si likes viene null, mostramos 0.
+                label = "${post.likes ?: 0}",
+                contentDescription = if (post.liked == true) "Quitar me gusta" else "Me gusta",
+                tint = if (post.liked == true) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
+                onClick = { onLikeClick(post) }
+            )
+
+            // Estrella clickeable: agrega/quita al AUTOR de los favoritos (R6).
+            // Solo se muestra si la pantalla pasó una acción (en el feed sí).
+            if (onFavoriteClick != null) {
+                PostAction(
+                    icon = Icons.Filled.Star,
+                    label = "Favorito",
+                    contentDescription = if (isFavorite) {
+                        "Quitar a ${post.author ?: "este usuario"} de favoritos"
+                    } else {
+                        "Agregar a ${post.author ?: "este usuario"} a favoritos"
+                    },
+                    // Rellena cuando el autor ya es favorito (estado del wireframe).
+                    tint = if (isFavorite) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    onClick = { onFavoriteClick.invoke(post) }
                 )
             }
 
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Si message viene null, mostramos un texto genérico.
-            Text(text = post.message ?: "(sin texto)")
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Corazón clickeable: da o quita el like.
-            // La estrella de favoritos va al lado, en la misma fila.
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Row(
-                    modifier = Modifier.clickable { onLikeClick(post) },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = if (post.liked == true) "♥" else "♡")
-                    Spacer(modifier = Modifier.width(4.dp))
-                    // Si likes viene null, mostramos 0.
-                    Text(text = "${post.likes ?: 0}",
-                        style = MaterialTheme.typography.bodySmall)
-                }
-
-                // Estrella clickeable: agrega/quita al AUTOR de los favoritos (R6).
-                // Solo se muestra si la pantalla pasó una acción (en el feed sí).
-                if (onFavoriteClick != null) {
-                    Spacer(modifier = Modifier.width(20.dp))
-                    Row(
-                        modifier = Modifier.clickable { onFavoriteClick.invoke(post) },
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = if (isFavorite) "★" else "☆")
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "Favorito",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                    }
-                }
-            }
-
             if (onPostClick != null) {
-                // Espacio vertical entre la fila de like/favorito y "Responder".
-                Spacer(modifier = Modifier.height(8.dp))
-
                 // Abre el post con sus respuestas.
-                Row(
-                    modifier = Modifier.clickable { onPostClick.invoke(post) },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = "💬")
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "Responder",
-                        style = MaterialTheme.typography.bodySmall)
-                }
+                PostAction(
+                    icon = Icons.AutoMirrored.Filled.Send,
+                    label = "Responder",
+                    contentDescription = "Abrir el post y responder",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    onClick = { onPostClick.invoke(post) }
+                )
             }
         }
+    }
+}
+
+// Acción chica de la tarjeta: ícono + texto, con área de toque cómoda.
+@Composable
+private fun PostAction(
+    icon: ImageVector,
+    label: String,
+    contentDescription: String,
+    tint: Color,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 6.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = tint,
+            modifier = Modifier.size(18.dp)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = tint
+        )
     }
 }
 
