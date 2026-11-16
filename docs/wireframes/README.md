@@ -137,7 +137,7 @@ Si falla el envío de una respuesta, se muestra el error y **el texto escrito no
 | 4 | Campo **Email** | Se ve pero **no se puede editar** (fondo gris, `enabled = false`). | HU-06 esc. 3 |
 | 5 | Campo **URL del avatar** | Editable. Si queda vacío no se envía. | HU-06 esc. 2 |
 | 6 | Campo **Contraseña nueva (opcional)** | Si se completa, se envía en el `PUT`; si queda vacía, no se cambia. | HU-06 esc. 4 |
-| 7 | Botón **Guardar** | Llama a `PUT /me/profile` con **solo los campos modificados**. | HU-06 esc. 2 |
+| 7 | Botón **Guardar** | Llama a `PUT /me/profile` con el nombre y el avatar (la API exige los dos) y la contraseña solo si se escribió. | HU-06 esc. 2 |
 | 8 | Botón **Salir** | Cierra sesión y borra borrador, favoritos y token. | Funcionalidad opcional |
 | 9 | Confirmación **"Perfil actualizado."** | Aviso verde debajo del botón. | HU-06 esc. 2 |
 | 10 | Error al guardar | Mensaje rojo. **Los cambios siguen en el formulario.** | HU-06 esc. 5 |
