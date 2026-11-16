@@ -55,9 +55,12 @@
     <rect x="186" y="320" width="150" height="46" fill="#e6e6e6" stroke="#000" rx="23"/>
     <text x="261" y="348" font-size="12" font-weight="bold" text-anchor="middle">Publicar</text>
 
-    <text x="24" y="396" font-size="12" fill="#2e7d32">Borrador guardado</text>
-    <circle cx="14" cy="386" r="11" fill="#000"/>
-    <text x="14" y="390" font-size="11" fill="#fff" text-anchor="middle">6</text>
+    <!-- Aviso inferior (snackbar): en la app el mensaje aparece abajo,
+         igual que en el wireframe del Anexo IV. -->
+    <rect x="16" y="630" width="328" height="44" fill="#2d3748" rx="8"/>
+    <text x="32" y="657" font-size="12" fill="#ffffff">Borrador guardado</text>
+    <circle cx="24" cy="612" r="11" fill="#000"/>
+    <text x="24" y="616" font-size="11" fill="#fff" text-anchor="middle">6</text>
 
     <text x="24" y="424" font-size="11" fill="#666">Al volver a entrar (incluso tras cerrar la app)</text>
     <text x="24" y="440" font-size="11" fill="#666">el texto se recupera y dice "Borrador recuperado".</text>
@@ -80,10 +83,12 @@
     <rect x="186" y="320" width="150" height="46" fill="#e6e6e6" stroke="#000" rx="23"/>
     <text x="261" y="348" font-size="12" font-weight="bold" text-anchor="middle">Publicar</text>
 
-    <text x="24" y="396" font-size="12" fill="#b00020">Sin conexión a internet. Revisá tu red</text>
-    <text x="24" y="412" font-size="12" fill="#b00020">e intentá de nuevo.</text>
-    <circle cx="14" cy="386" r="11" fill="#000"/>
-    <text x="14" y="390" font-size="11" fill="#fff" text-anchor="middle">7</text>
+    <!-- Aviso inferior (snackbar) con el error, igual que en la app. -->
+    <rect x="16" y="618" width="328" height="58" fill="#2d3748" rx="8"/>
+    <text x="32" y="640" font-size="11" fill="#ffffff">Sin conexión a internet. Revisá tu red</text>
+    <text x="32" y="656" font-size="11" fill="#ffffff">e intentá de nuevo.</text>
+    <circle cx="24" cy="600" r="11" fill="#000"/>
+    <text x="24" y="604" font-size="11" fill="#fff" text-anchor="middle">7</text>
 
     <text x="24" y="440" font-size="11" fill="#666">Mientras se envía: spinner + "Publicando..."</text>
     <text x="24" y="456" font-size="11" fill="#666">y el botón Volver queda deshabilitado.</text>

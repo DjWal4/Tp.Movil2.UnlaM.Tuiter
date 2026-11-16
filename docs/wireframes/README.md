@@ -98,8 +98,8 @@ El ícono **⟳ Actualizar** (barra superior, junto a la estrella) recarga el fe
 | 3 | Botón **Guardar borrador** | Guarda el texto en Room sin publicarlo. | HU-03 esc. 1 |
 | 4 | Botón **Publicar** | Llama a `POST /me/tuits` y vuelve al feed. | HU-02 esc. 1 |
 | 5 | Botones **deshabilitados** | Si el campo está vacío o solo tiene espacios no se puede guardar ni publicar. | HU-02 esc. 2 · HU-03 esc. 4 |
-| 6 | Confirmación **"Borrador guardado"** | Aviso verde debajo de los botones. Al volver a entrar se recupera el texto. | HU-03 esc. 1 y 2 |
-| 7 | Error al publicar | Mensaje de red. El texto escrito **no se pierde**. | HU-02 esc. 4 |
+| 6 | Confirmación **"Borrador guardado"** | Aviso inferior (snackbar), como en el wireframe. Al volver a entrar se recupera el texto. | HU-03 esc. 1 y 2 |
+| 7 | Error al publicar | Aviso inferior (snackbar) con el mensaje de red. El texto escrito **no se pierde**. | HU-02 esc. 4 |
 | 8 | Envío en curso | Spinner + "Publicando..." y **Volver** deshabilitado, para no publicar dos veces. | HU-02 esc. 3 |
 
 Al publicar con éxito, el borrador se borra y la próxima vez la pantalla aparece vacía

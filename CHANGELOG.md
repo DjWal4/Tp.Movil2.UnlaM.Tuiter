@@ -46,7 +46,9 @@ edición de perfil, seguridad del token y documentación obligatoria.
   derecha (actualizar, usuarios favoritos, mi perfil); tarjetas del feed con avatar, autor, fecha
   y mensaje, y las acciones (me gusta + contador, favorito, responder) en una sola fila; botón
   flotante "+"; y estados de carga / vacío / error centrados con ícono, título, texto de ayuda y
-  botón "Reintentar". Aplicado al feed, nuevo post, detalle/respuestas y favoritos.
+  botón "Reintentar". Aplicado al feed, nuevo post, detalle/respuestas y favoritos. En "Nuevo
+  post" los mensajes ("Borrador guardado", "No se pudo publicar") se muestran como aviso
+  inferior (snackbar), igual que en el wireframe del Anexo IV.
 - **`build.gradle.kts` / catálogo**: se agregó `androidx.compose.material:material-icons-core`
   (versión tomada del Compose BOM) para los íconos de las acciones y de los estados.
 - **`docs/wireframes/feed.svg`**: el título pasa a "UNLaM Tuiter" y los accesos a favoritos y
