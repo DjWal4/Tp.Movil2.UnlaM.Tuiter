@@ -49,6 +49,13 @@ edición de perfil, seguridad del token y documentación obligatoria.
 - El login ya no usa credenciales escritas en el código.
 - El botón "Salir" se movió del feed al perfil, para dejar lugar a "★ Favoritos" y "Perfil".
 - El botón de enviar respuesta se llama "Responder" (antes "Enviar").
+- **Perfil (`PUT /me/profile`)**: el servidor valida `avatar_url` como obligatorio y respondía
+  **500** al guardar solo el nombre. Ahora la app envía siempre `name` y `avatar_url` (y la
+  contraseña solo si se escribe una nueva). Detectado en la verificación en el celular.
+- **Login**: al volver del registro ya no queda visible el error de un intento de login
+  anterior junto al aviso "Cuenta creada...".
+- **Login**: el texto que se escribe en los campos se ve más oscuro y legible, también con
+  el tema dinámico de Android (nuevo `ui/theme/TextFieldColors.kt`).
 
 ### Notas técnicas
 

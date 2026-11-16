@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ar.edu.unlam.tuiter.ui.rememberAppContainer
+import ar.edu.unlam.tuiter.ui.theme.tuiterTextFieldColors
 
 // ============================================================
 // PANTALLA DE INICIO DE SESIÓN (R4 / HU-05)
@@ -66,6 +67,13 @@ fun LoginScreen(
     // navegación ocurra una sola vez por cambio de estado.
     LaunchedEffect(state.isLoggedIn) {
         if (state.isLoggedIn) onLoggedIn()
+    }
+
+    // Si llegamos desde el registro con un mensaje ("Cuenta creada..."),
+    // limpiamos el error de un intento de login anterior para que no se
+    // vean los dos mensajes juntos.
+    LaunchedEffect(infoMessage) {
+        if (infoMessage != null) viewModel.clearError()
     }
 
     Column(
@@ -112,6 +120,8 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
             ),
+            // Texto más oscuro para que se lea bien al escribir (ver ui/theme/TextFieldColors.kt).
+            colors = tuiterTextFieldColors(),
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -129,6 +139,8 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
+            // Texto más oscuro para que se lea bien al escribir (ver ui/theme/TextFieldColors.kt).
+            colors = tuiterTextFieldColors(),
             modifier = Modifier.fillMaxWidth()
         )
 

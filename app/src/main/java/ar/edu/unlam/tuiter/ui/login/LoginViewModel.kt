@@ -48,6 +48,16 @@ class LoginViewModel(
         _state.value = _state.value.copy(password = value, error = null)
     }
 
+    // Borra el error anterior.
+    // Se usa al volver del registro: el aviso "Cuenta creada" tiene que
+    // reemplazar al error de un login fallido anterior (si no, se ven los
+    // dos mensajes juntos y confunde).
+    fun clearError() {
+        if (_state.value.error != null) {
+            _state.value = _state.value.copy(error = null)
+        }
+    }
+
     // Se llama al tocar "Ingresar".
     fun login() {
         val current = _state.value
