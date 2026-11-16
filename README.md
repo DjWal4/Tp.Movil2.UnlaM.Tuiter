@@ -470,7 +470,9 @@ Versiones entregadas: **`v1.0.0`** y **`v1.1.0`** (tags sobre `main`).
 - **Migración de Room en vez de `fallbackToDestructiveMigration()`**: conserva el borrador.
 - **Token en `SharedPreferences`**: la sesión sobrevive al cierre de la app.
 - **Token de aplicación en `BuildConfig`**: cumple la condición de seguridad de la consigna.
-- **`PUT /me/profile` con campos opcionales**: se envía solo lo que el usuario modificó.
+- **`PUT /me/profile` con `name` y `avatar_url` siempre**: la API valida el avatar como
+  obligatorio (aunque la documentación lo muestre opcional), así que se envían los dos
+  campos; la contraseña viaja solo si el usuario escribió una nueva.
 - **Modelos con campos `nullable`**: la API puede omitir campos; así se evitan crashes.
 
 ---

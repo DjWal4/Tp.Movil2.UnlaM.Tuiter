@@ -45,7 +45,9 @@ class AuthRepository(private val api: TuiterApi) {
     }
 
     // Edita el perfil (PUT /me/profile).
-    // Solo se envían los campos que llegan con valor (los null se omiten).
+    // Los campos son opcionales en Kotlin (los null se omiten del JSON),
+    // pero la API exige `name` y `avatar_url`: el ProfileViewModel siempre
+    // manda los dos y agrega `password` solo si el usuario escribió una nueva.
     // Devuelve true si la API confirmó el cambio.
     suspend fun updateProfile(
         name: String? = null,
