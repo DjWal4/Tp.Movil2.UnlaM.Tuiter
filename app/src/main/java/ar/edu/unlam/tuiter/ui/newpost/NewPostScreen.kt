@@ -6,27 +6,24 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,6 +46,34 @@ fun NewPostScreen(
 
     val state by viewModel.state.collectAsState()
 
+    // Aviso inferior (snackbar): el wireframe muestra ahí los mensajes de
+    // confirmación ("Borrador guardado") y de error ("No se pudo publicar").
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    // Cuando el ViewModel informa el estado del borrador, lo mostramos abajo.
+    // Después de mostrarlo lo consumimos para que no se repita al recomponer.
+    LaunchedEffect(state.draftStatus) {
+        state.draftStatus?.let { message ->
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+            viewModel.consumeDraftStatus()
+        }
+    }
+
+    // Igual con el error: se muestra como aviso inferior y se consume.
+    LaunchedEffect(state.error) {
+        state.error?.let { message ->
+            snackbarHostState.showSnackbar(
+                message = message,
+                // Más tiempo porque el usuario necesita leer el motivo.
+                duration = SnackbarDuration.Long
+            )
+            viewModel.consumeError()
+        }
+    }
+
     // Cuando el post se publica, avisamos y volvemos al feed.
     LaunchedEffect(state.published) {
         if (state.published) {
@@ -67,7 +92,9 @@ fun NewPostScreen(
                 // así el usuario no sale a mitad del envío.
                 backEnabled = !state.isPublishing
             )
-        }
+        },
+        // Contenedor del aviso inferior (mensajes del wireframe).
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -126,52 +153,9 @@ fun NewPostScreen(
                 }
             }
 
-            // Mensaje de estado del borrador ("Borrador guardado" /
-            // "Borrador recuperado"), con un tilde para que se note que salió bien.
-            state.draftStatus?.let { status ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Filled.Check,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = status,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-
-            // Mensaje de error, si hubo ("No se pudo publicar", etc.).
-            // Paso 16: en color de error para que se distinga del resto.
-            state.error?.let { error ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Filled.Warning,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = error,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-            }
-
-            // Aclaración del wireframe: el texto se puede volver a enviar
-            // si falla, y el borrador queda guardado en el celular.
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "El borrador se guarda en este dispositivo.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            // Los mensajes ("Borrador guardado", "No se pudo publicar") ya no
+            // van dentro del formulario: el wireframe los muestra como aviso
+            // inferior (snackbar), manejado arriba con snackbarHostState.
         }
     }
 }
