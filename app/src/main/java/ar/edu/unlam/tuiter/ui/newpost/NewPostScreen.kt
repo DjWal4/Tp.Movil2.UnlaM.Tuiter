@@ -6,29 +6,34 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.foundation.layout.imePadding
+import ar.edu.unlam.tuiter.ui.components.TuiterTopBar
 import ar.edu.unlam.tuiter.ui.rememberAppContainer
+import ar.edu.unlam.tuiter.ui.theme.tuiterTextFieldColors
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewPostScreen(
     onBack: () -> Unit,
@@ -54,15 +59,13 @@ fun NewPostScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Nuevo post") },
-                navigationIcon = {
-                    // HU-02 escenario 3: mientras se publica no se puede volver,
-                    // así el usuario no sale a mitad del envío.
-                    TextButton(onClick = onBack, enabled = !state.isPublishing) {
-                        Text("Volver")
-                    }
-                }
+            // Wireframe: flecha "Volver" a la izquierda y "Nuevo post" como título.
+            TuiterTopBar(
+                title = "Nuevo post",
+                onBack = onBack,
+                // HU-02 escenario 3: mientras se publica no se puede volver,
+                // así el usuario no sale a mitad del envío.
+                backEnabled = !state.isPublishing
             )
         }
     ) { innerPadding ->
@@ -74,14 +77,19 @@ fun NewPostScreen(
                 .imePadding(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            // Campo de texto grande del wireframe. Si había un borrador,
+            // el ViewModel ya lo cargó y aparece escrito acá.
             OutlinedTextField(
                 value = state.message,
                 onValueChange = viewModel::onMessageChange,
                 label = { Text("¿Qué estás pensando?") },
                 modifier = Modifier.fillMaxWidth(),
-                minLines = 4,
-                enabled = !state.isPublishing
+                minLines = 6,
+                enabled = !state.isPublishing,
+                // Mismo color de texto legible que el login.
+                colors = tuiterTextFieldColors()
             )
+
             // Fila con los DOS botones: Guardar borrador | Publicar
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -89,6 +97,7 @@ fun NewPostScreen(
             ) {
                 OutlinedButton(
                     onClick = { viewModel.saveDraft() },
+                    // Wireframe: deshabilitado mientras el texto está vacío.
                     enabled = state.message.isNotBlank() && !state.isPublishing,
                     modifier = Modifier.weight(1f)
                 ) {
@@ -97,6 +106,8 @@ fun NewPostScreen(
 
                 Button(
                     onClick = { viewModel.publish() },
+                    // Wireframe: deshabilitado si el texto está vacío
+                    // o mientras se está enviando.
                     enabled = state.message.isNotBlank() && !state.isPublishing,
                     modifier = Modifier.weight(1f)
                 ) {
@@ -114,18 +125,53 @@ fun NewPostScreen(
                     }
                 }
             }
-                // Mensaje de estado del borrador.
-                state.draftStatus?.let { status ->
-                    Text(text = status)
+
+            // Mensaje de estado del borrador ("Borrador guardado" /
+            // "Borrador recuperado"), con un tilde para que se note que salió bien.
+            state.draftStatus?.let { status ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = status,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
-                // Mensaje de error, si hubo.
-                // Paso 16: en color de error para que se distinga del resto.
-                state.error?.let { error ->
+            }
+
+            // Mensaje de error, si hubo ("No se pudo publicar", etc.).
+            // Paso 16: en color de error para que se distinga del resto.
+            state.error?.let { error ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.Warning,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = error,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error
                     )
                 }
+            }
+
+            // Aclaración del wireframe: el texto se puede volver a enviar
+            // si falla, y el borrador queda guardado en el celular.
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "El borrador se guarda en este dispositivo.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

@@ -41,6 +41,16 @@ edición de perfil, seguridad del token y documentación obligatoria.
   si falta configurar el token.
 - **`ErrorMapper`**: agrega mensajes para **409** (email ya registrado) y **422** (datos inválidos).
 - **`AppContainer`**: provee `AuthRepository`.
+- **Interfaz alineada al Anexo IV (wireframes)**: nueva barra superior compartida
+  (`ui/components/TuiterTopBar.kt`) con el título a la izquierda y los accesos como íconos a la
+  derecha (actualizar, usuarios favoritos, mi perfil); tarjetas del feed con avatar, autor, fecha
+  y mensaje, y las acciones (me gusta + contador, favorito, responder) en una sola fila; botón
+  flotante "+"; y estados de carga / vacío / error centrados con ícono, título, texto de ayuda y
+  botón "Reintentar". Aplicado al feed, nuevo post, detalle/respuestas y favoritos.
+- **`build.gradle.kts` / catálogo**: se agregó `androidx.compose.material:material-icons-core`
+  (versión tomada del Compose BOM) para los íconos de las acciones y de los estados.
+- **`docs/wireframes/feed.svg`**: el título pasa a "UNLaM Tuiter" y los accesos a favoritos y
+  perfil se dibujan como íconos, igual que en la app.
 - **README**: reescrito con el estado real de R1–R8, las condiciones técnicas, la configuración
   del token, los wireframes y las limitaciones.
 
