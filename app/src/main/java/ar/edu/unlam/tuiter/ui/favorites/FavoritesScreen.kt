@@ -11,13 +11,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,12 +29,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ar.edu.unlam.tuiter.ui.components.EmptyView
+import ar.edu.unlam.tuiter.ui.components.TuiterTopBar
 import ar.edu.unlam.tuiter.ui.rememberAppContainer
 import coil.compose.AsyncImage
 
 // Pantalla R6: lista de usuarios favoritos guardados en Room.
-// Se abre desde el botón "★ Favoritos" del feed.
-@OptIn(ExperimentalMaterial3Api::class)
+// Se abre desde el ícono de la estrella en la barra superior del feed.
 @Composable
 fun FavoritesScreen(onBack: () -> Unit) {
 
@@ -53,11 +53,10 @@ fun FavoritesScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Usuarios favoritos") },
-                navigationIcon = {
-                    TextButton(onClick = onBack) { Text("Volver") }
-                }
+            // Misma barra superior que el resto: flecha "Volver" + título.
+            TuiterTopBar(
+                title = "Usuarios favoritos",
+                onBack = onBack
             )
         }
     ) { innerPadding ->
@@ -78,9 +77,11 @@ fun FavoritesScreen(onBack: () -> Unit) {
             if (state.favorites.isEmpty()) {
                 // Todavía no hay favoritos: estado vacío unificado (Paso 16),
                 // con el mismo estilo que el feed y el detalle.
+                // La estrella como ícono recuerda con qué botón se agregan.
                 EmptyView(
-                    message = "Todavía no tenés usuarios favoritos.\n" +
-                        "Tocá la ☆ en un post del feed para agregarlos."
+                    title = "Todavía no tenés usuarios favoritos.",
+                    message = "Tocá la estrella en un post del feed para agregarlos.",
+                    icon = Icons.Filled.Star
                 )
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {

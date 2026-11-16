@@ -70,6 +70,9 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
+    // Íconos de Material: los usa el feed (estrella, perfil, corazón, responder)
+    // y los estados (vacío, error). Ver ui/components/TuiterTopBar.kt.
+    implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
